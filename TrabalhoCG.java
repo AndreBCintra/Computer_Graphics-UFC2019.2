@@ -20,7 +20,8 @@ class Main {
 
 // --------- Ponto ----------
 class Ponto {
-  double X, Y, Z;
+  double X, Y, Z, T;
+  int id; // figura ao qual o ponto pertence
 
   Ponto(double X, double Y, double Z){
     this.X = X;
@@ -32,6 +33,14 @@ class Ponto {
     this.X = X1;
     this.Y = Y1;
     this.Z = Z1;
+  }
+  
+  void setT(double T){
+    this.T = T;
+  }
+
+  void setID(int id){
+    this.id = id;
   }
 
   Ponto SomaPonto(Ponto p){ // soma entre dois pontos
@@ -62,6 +71,14 @@ class Ponto {
   public String toString(){
     return "(" + this.X + ", " + this.Y + ", " + this.Z + ")";
   }
+}
+
+
+// -------- Pixel -----------
+class Pixel{
+  String cor;
+  PontosInt ptsInt;
+  FigurasGeo PrimeiroObjeto;
 }
 
 
@@ -101,6 +118,17 @@ class PontosInt{ // Classe feita para guardar os pontos de intersecao
     if (i == 0){
       System.out.println("Nao ha intersecao");
     }
+  }
+  
+  PontosInt Uniao(PontosInt p){
+    for (int i = 0; i < p.N; i++){
+      this.addPonto(p.getPonto(i));
+    }
+    return this;
+  }
+  
+  void OrdenaPontos(){
+    
   }
 }
 
@@ -215,15 +243,22 @@ class Painel extends Plano{ // Vetor do muro precisa ser paralelo ao eixo Z (ou 
   }
 }
 
-
+// -------- Figuras Geometricas ------------
+abstract class FigurasGeo{
+  String cor;
+  int id;
+  boolean acertado;
+}
 // -------- Esfera ---------
-class Esfera{
+class Esfera extends FigurasGeo{
   Ponto C; // Ponto do centro da esfera
   double R; // R = raio
 
-  Esfera(Ponto C, double R){
+  Esfera(Ponto C, double R, String cor, int id){
     this.C = C;
     this.R = R;
+    this.cor = cor;
+    this.id = id;
   }
 
   double CalculoDeltaEsf(Reta R){
@@ -259,16 +294,18 @@ class Esfera{
 
 
 //  --------- Cilindro ---------
-class Cilindro{
+class Cilindro extends FigurasGeo{
   Ponto B; // Ponto da base do cilindro
   double R, H; // R = raio; H = altura
   Vetor u; // Vetor unitario da direcao e sentido do cilindro
 
-  Cilindro(Ponto B, Vetor u, double R, double H){
+  Cilindro(Ponto B, Vetor u, double R, double H, String cor, int id){
     this.B = B;
     this.u = u;
     this.R = R;
     this.H = H;
+    this.cor = cor;
+    this.id = id;
   }
 
   double CalculoDeltaCil(Reta r){
@@ -360,12 +397,14 @@ class Cone{ // cos**2(X) = H**2 / H**2 + R**2
   Ponto C, V; // C = centro da base, V = vertice do cone
   double H, R; // H = altura, R = raio
 
-  Cone(Ponto C, Ponto V, double R, double H, Vetor n){
+  Cone(Ponto C, Ponto V, double R, double H, Vetor n, String cor, int id){
     this.n = n;
     this.H = H;
     this.R = R;
     this.C = C;
     this.V = V;
+    this.cor = cor;
+    this.id = id;
   }
 
   Cone(Ponto C, double R, double H, Vetor n){
